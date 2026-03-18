@@ -103,6 +103,30 @@ WindowSwitch.switchToLastWindow(driver);*/
 	        }
 	    }
 	}
+	public static String toChild(WebDriver d) {
+		String parent = d.getWindowHandle();
+
+		for (int i = 0; i < 5; i++) {
+			if (d.getWindowHandles().size() > 1) {
+				for (String w : d.getWindowHandles()) {
+					if (!w.equals(parent)) {
+						d.switchTo().window(w);
+						return parent;
+					}
+				}
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (Exception e) {
+			}
+		}
+		return parent;
+	}
+
+	public static void toParent(WebDriver d, String parent) {
+		d.switchTo().window(parent);
+	}
+
 	
 	
 	//Way 1 and 4 are similar but in way1 there will be multiple switch will happen between tabs but in way 4 there will be direct switching to the current window
