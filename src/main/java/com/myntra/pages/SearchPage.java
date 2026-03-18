@@ -1,15 +1,6 @@
 package com.myntra.pages;
 
-import java.util.List;
-
-import org.openqa.selenium.By;
-
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
-import org.openqa.selenium.support.PageFactory;
-
-import com.myntra.utils.WaitUtils;
 
 public class SearchPage {
 protected WebDriver driver;
