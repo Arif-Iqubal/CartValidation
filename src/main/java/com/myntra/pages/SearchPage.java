@@ -1,10 +1,22 @@
 package com.myntra.pages;
 
-public class SearchPage {
+import org.openqa.selenium.WebDriver;
 
-	public void searchPage() {
-		// After getting product list switch tab then call addtobag method from product
-		// page
+public class SearchPage {
+protected WebDriver driver;
+
+	public void searchPage(WebDriver driver) 
+	{
+		this.driver=driver;
+		PageFactory.initElements(driver,this);
+		 
+		
+	}
+	
+	public void searchPage()
+	{
+		List<WebElement> products=driver.findElements(By.xpath("//li[contains(@class,'product-base')]"));
+		WaitUtils.waitForClickability(driver, products.get(0)).click();
 	}
 
 }
