@@ -1,5 +1,7 @@
 package com.myntra.pages;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.*;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +12,12 @@ import com.myntra.utils.*;
 import java.util.List;
 
 public class HomePage {
+	protected WebDriver driver;
+	public HomePage(WebDriver driver)
+	{
+		this.driver=driver;
+		PageFactory.initElements(driver,this);
+	}
 
 	WebDriver driver;
 	Logger log = LoggerUtil.getLogger(HomePage.class);

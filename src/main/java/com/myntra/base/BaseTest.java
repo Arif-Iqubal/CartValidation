@@ -39,11 +39,8 @@ public class BaseTest {
     	{
     		  DriverFactory.quitDriver();
     	}
-
      
-       if (loginDriver != null) {
-           loginDriver.quit();
-       }
+      
     }
     
     /*🔑 Why this works:@AfterMethod(alwaysRun = true)
