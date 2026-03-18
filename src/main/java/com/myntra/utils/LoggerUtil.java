@@ -1,0 +1,33 @@
+package com.myntra.utils;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.myntra.pages.HomePage;
+
+public class LoggerUtil {
+
+	// Create logger instance
+	private static final Logger logger = LogManager.getLogger(LoggerUtil.class);
+
+	public static void info(String message) {
+		logger.info(message);
+	}
+
+	public static void warn(String message) {
+		logger.warn(message);
+	}
+
+	public static void error(String message) {
+		logger.error(message);
+	}
+
+	public static void debug(String message) {
+		logger.debug(message);
+	}
+
+	public static Logger getLogger(Class<?> cls) {
+		return LogManager.getLogger(cls);
+	}
+
+}
