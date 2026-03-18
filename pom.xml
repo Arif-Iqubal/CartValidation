@@ -24,7 +24,6 @@
     <groupId>org.seleniumhq.selenium</groupId>
     <artifactId>selenium-java</artifactId>
     <version>4.35.0</version>
-    <scope>compile</scope>
 </dependency>
 
 <dependency>
