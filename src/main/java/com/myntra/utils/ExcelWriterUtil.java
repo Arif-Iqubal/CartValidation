@@ -64,7 +64,8 @@ public class ExcelWriterUtil {
 	                    cell.setCellValue("View Screenshot");
 
 	                    Hyperlink link = helper.createHyperlink(HyperlinkType.FILE);
-	                    link.setAddress(screenshotPath);
+	                    File filee = new File(screenshotPath);
+	                    link.setAddress(filee.toURI().toString());
 
 	                    cell.setHyperlink(link);
 	                } else {

@@ -2,125 +2,96 @@ package com.myntra.tests;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.myntra.base.BaseTest;
+import com.myntra.listeners.ExtentTestListener;
 import com.myntra.pages.CartPage;
 import com.myntra.pages.HomePage;
 import com.myntra.pages.ProductPage;
 import com.myntra.pages.SearchPage;
+import com.myntra.utils.ExcelWriterUtil;
+import com.myntra.utils.LoggerUtil;
+import com.myntra.utils.ScreenshotUtil;
 
 import jdk.internal.org.jline.utils.Log;
 
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import java. util.List;
+@Listeners(ExtentTestListener.class)
+public class UseCase5 extends BaseTest
+{
 
-public class UseCase5 {
-
-	private static final Logger logger = LogManager.getLogger(UseCase5.class);
+//	private static final Logger logger = LogManager.getLogger(UseCase5.class);
 	
 	@Test
 	public void emptyCartDataDrivenTest() {
-		
-		String testId = "UC5";
-		String description = "Add multiple products and remove all to validate empty cart";
-		
-		try {
-			Logger log;
-			log.info("===== Test Started =====");
+	    String testId = "UC5";
+	    String description = "Add multiple products and remove all to validate empty cart";
 
-            HomePage home = new HomePage(driver);
-            SearchPage search = new SearchPage(driver);
-            ProductPage product = new ProductPage(driver);
-            CartPage cart = new CartPage(driver);
+	    try {
 
-            // Step 1: Read product names from text file
-            log.info("Reading product names from text file");
+	        LoggerUtil.info("===== Test Started =====");
+	        driver.get("https://www.myntra.com/");
 
-            List<String> products = FileReaderUtil.readProducts("src/test/resources/testdata/products.txt");
+	        HomePage home = new HomePage(driver);
+	        SearchPage search = new SearchPage(driver);
+	        ProductPage product = new ProductPage(driver);
+	        CartPage cart = new CartPage(driver);
 
-            int expectedCount = 0;
+	        // Step 1
+	        LoggerUtil.info("Step 1: Reading product names and adding to cart");
+	        home.addProduct("D:\\MyntraCart\\CartValidation\\src\\test\\resources\\products.xlsx");
 
-            // Step 2: Search and add products
-            for(String item : products) {
+	        driver.navigate().refresh();
 
-                log.info("Searching product: " + item);
+	        // Step 2
+	        LoggerUtil.info("Step 2: Validating cart count");
 
-                home.addProduct(item);
+	        int actualCartCount = search.getCartCount();
+	        int expectedCartCount = 3;
 
-                search.searchProduct(item);
+	        LoggerUtil.info("Expected Cart Count: " + expectedCartCount);
+	        LoggerUtil.info("Actual Cart Count: " + actualCartCount);
 
-                product.addToBag();
+	        Assert.assertEquals(actualCartCount, expectedCartCount);
 
-                expectedCount++;
+	        LoggerUtil.info("Cart count validation PASSED");
 
-                log.info("Product added to cart. Expected cart count: " + expectedCount);
-            }
+	        // Step 3
+	        LoggerUtil.info("Step 3: Navigating to cart page");
+	        product.clickCartLogo();
 
-            // Step 3: Validate cart count
-            int actualCartCount = home.cartIconCount();
+	        LoggerUtil.info("Navigated to cart page");
 
-            log.info("Cart icon count is: " + actualCartCount);
+	        // Step 4
+	        LoggerUtil.info("Step 4: Removing item(s) from cart");
+	        cart.removeItem();
 
-            Assert.assertEquals(actualCartCount, expectedCount);
+	        // Step 5
+	        LoggerUtil.info("Step 5: Validating empty cart");
 
-            log.info("Cart count validation passed");
+	        boolean status = cart.cartStatus();
 
-            // Step 4: Navigate to cart
-            driver.get("https://www.myntra.com/checkout/cart");
+	        LoggerUtil.info("Cart empty status: " + status);
 
-            log.info("Navigated to cart page");
+	        Assert.assertTrue(status);
 
-            // Step 5: Remove items one by one
-            while(home.cartIconCount() > 0) {
+	        LoggerUtil.info("Empty cart validation PASSED");
 
-                log.info("Removing item from cart");
+	    }
+	    catch (Throwable e) {
 
-                cart.removeItem();
+	        LoggerUtil.error("===== TEST FAILED =====");
+	        LoggerUtil.error("Error Type: " + e.getClass().getSimpleName());
+	        LoggerUtil.error("Error Message: " + e.getMessage());
 
-                int newCount = home.cartIconCount();
+	        // This line is important for full debug (stacktrace)
+	        e.printStackTrace();
 
-                log.info("Cart count after removal: " + newCount);
-            }
+	        Assert.fail();
+	        throw e;
+	    }
 
-            // Step 6: Validate empty cart message
-            boolean status = cart.cartStatus();
-
-            log.info("Checking empty cart status");
-
-            Assert.assertTrue(status);
-
-            log.info("Empty cart validation successful");
-
-            // Step 7: Write result to Excel
-
-            ExcelWriterUtil.writeResult(
-                    testId,
-                    description,
-                    "Cart should become empty",
-                    "Cart empty message displayed",
-                    "PASS"
-            );
-
-            log.info("Test result written to Excel");
-
-        }
-
-        catch(Exception e) {
-
-            log.error("Test Failed due to exception: " + e.getMessage());
-
-            ExcelWriterUtil.writeResult(
-                    testId,
-                    description,
-                    "Cart should become empty",
-                    "Test failed due to exception",
-                    "FAIL"
-            );
-
-            Assert.fail();
-        }
-
-        log.info("===== Test Completed =====");
-
-    }
-	
+	    LoggerUtil.info("===== Test Completed =====");
+	}	
 }
