@@ -8,7 +8,7 @@ import java.time.Duration;
 	import org.openqa.selenium.support.ui.ExpectedConditions;
 	import org.openqa.selenium.support.ui.WebDriverWait;
 
-	public class WaitUtils {
+	public class WaitUtil {
 
 	    private static final int TIMEOUT = 20;
 

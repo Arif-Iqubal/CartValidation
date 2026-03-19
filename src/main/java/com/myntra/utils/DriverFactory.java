@@ -11,7 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class DriverFactory {
+public class Driverfactory {
 
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 

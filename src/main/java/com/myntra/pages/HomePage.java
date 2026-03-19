@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.myntra.utils.*;
+import com.myntra.utils.WaitUtil;
 
 import java.util.List;
 
@@ -19,28 +20,23 @@ public class HomePage {
 		PageFactory.initElements(driver,this);
 	}
 
-	WebDriver driver;
-	Logger log = LoggerUtil.getLogger(HomePage.class);
-
-	public HomePage(WebDriver driver) {
-		this.driver = driver;
-		PageFactory.initElements(driver, this);
-	}
-
+	
+@FindBy(xpath="//a[@id='header-cart-icon']//span") WebElement cartCount;
 	@FindBy(xpath = "//input[@placeholder='Search for products, brands and more']")
 	WebElement searchBox;
 
-	public void addProduct(String path, ExtentTest test) {
+	public void addProduct(String path) {
 
 		List<String> products = ExcelReader.getProductNames(path);
 
 		for (String product : products) {
 
 			try {
-				log.info("Searching product: " + product);
-				test.info("Searching: " + product);
+				LoggerUtil.info("Searching product: " + products);
+			
+				
 
-				WaitUtils.waitForVisibility(driver, searchBox);
+				WaitUtil.waitForVisibility(driver, searchBox);
 				searchBox.clear();
 				searchBox.sendKeys(product);
 				searchBox.sendKeys(Keys.ENTER);
@@ -53,20 +49,29 @@ public class HomePage {
 				ProductPage productPage = new ProductPage(driver);
 				productPage.addToBag();
 
-				log.info("Product added: " + product);
-				test.pass("Added: " + product);
+				LoggerUtil.info("Product added: " + product);
+				
 
 				driver.close();
 				WindowSwitch.toParent(driver, parent);
 
 			} catch (Exception e) {
 
-				log.error("Failed product: " + product);
+				LoggerUtil.error("Failed product: " + product);
 
-				String img = ScreenshotUtil.capture(driver, product);
+				String img = ScreenshotUtil.takeScreenshot(driver, product);
 
-				test.fail("Failed: " + product).addScreenCaptureFromPath(img);
+				
 			}
 		}
 	}
+	
+	public int cartIconCount()
+	{
+		WaitUtil.waitForVisibility(driver, cartCount);
+		String count=cartCount.getText().replaceAll("[^0-9]","");
+	return Integer.parseInt(count);
+	}
 }
+		
+	

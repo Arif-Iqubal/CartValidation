@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-import com.myntra.utils.DriverFactory;
+import com.myntra.utils.Driverfactory;
 
 public class BaseTest {
 
@@ -22,7 +22,7 @@ public class BaseTest {
     public void setup(@Optional("chrome") String browser) {
 
     	//For Guest Driver
-       driver = DriverFactory.initDriver(browser);
+       driver = Driverfactory.initDriver(browser);
         //For logged in driver
 //        ChromeOptions options = new ChromeOptions();
 //        options.addArguments("--user-data-dir=C:\\selenium-profile");
@@ -37,7 +37,7 @@ public class BaseTest {
     public void tearDown() {
     	if(driver!=null)
     	{
-    		  DriverFactory.quitDriver();
+    		  Driverfactory.quitDriver();
     	}
      
       
